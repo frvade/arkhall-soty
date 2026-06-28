@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>История модельной библиотеки № 35 «Арт-холл Соты» — Уфа</title>
+<meta name="description" content="История модельной библиотеки № 35 в Уфе: от клуба железнодорожников 1938 года до современного Арт-холла «Соты» в Сипайлово. Хронология, факты и направления работы.">
+<meta property="og:title" content="История модельной библиотеки № 35 «Арт-холл Соты» — Уфа">
+<meta property="og:description" content="История модельной библиотеки № 35 в Уфе: от клуба железнодорожников 1938 года до современного Арт-холла «Соты» в Сипайлово.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#FAF5EC;color:#221C15;font-family:'Onest',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:#FFCC01;color:#221C15}
+img{display:block;max-width:100%}
+.navl{transition:color .2s ease;white-space:nowrap}
+.navl:hover{color:#F57200}
+.btnp{transition:background .25s ease,transform .25s ease,box-shadow .25s ease}
+.btnp:hover{background:#D9650A;transform:translateY(-2px);box-shadow:0 14px 30px -12px rgba(245,114,0,.6)}
+.tl-row{transition:transform .3s ease}
+.tl-card{transition:transform .35s cubic-bezier(.2,.7,.3,1),box-shadow .35s ease}
+.tl-card:hover{transform:translateY(-4px);box-shadow:0 22px 50px -24px rgba(60,38,8,.4)}
+@media (max-width:880px){
+  .pad-sec{padding-left:20px!important;padding-right:20px!important}
+  .nav-links{display:none!important}
+  .tl-line{left:26px!important;transform:none!important}
+  .tl-row{grid-template-columns:1fr!important;gap:0!important}
+  .tl-dot{left:26px!important;transform:transl(-50%,0)!important}
+  .tl-card{margin-left:60px!important;text-align:left!important}
+  .tl-spacer{display:none!important}
+  .tl-year-side{display:none!important}
+  .tl-year-inline{display:block!important}
+}
+</style>
+<script>
+/* image-slot — drag-and-drop image placeholder (session only, no persistence) */
+(()=>{
+const ACCEPT=['image/png','image/jpeg','image/webp','image/avif'];
+const MAX_DIM=1200;
+async function toDataUrl(file,targetW){
+  const bitmap=await createImageBitmap(file);
+  try{
+    const cap=Math.min(MAX_DIM,Math.max(1,Math.round(targetW*2))||MAX_DIM);
+    const scale=Math.min(1,cap/Math.max(bitmap.width,bitmap.height));
+    const w=Math.max(1,Math.round(bitmap.width*scale));
+    const h=Math.max(1,Math.round(bitmap.height*scale));
+    const canvas=document.createElement('canvas');
+    canvas.width=w;canvas.height=h;
+    canvas.getContext('2d').drawImage(bitmap,0,0,w,h);
+    return canvas.toDataURL('image/webp',0.85);
+  }finally{bitmap.close&&bitmap.close()}
+}
+const icon='<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>';
+const stylesheet=':host{display:inline-block;position:relative;vertical-align:top;font:13px/1.3 system-ui,-apple-system,sans-serif;color:rgba(0,0,0,.55);width:240px;height:160px}.frame{position:absolute;inset:0;overflow:hidden;background:rgba(0,0,0,.05)}.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:12px;cursor:pointer;user-select:none}.empty svg{opacity:.4}.empty .cap{max-width:90%;font-weight:500}.ring{position:absolute;inset:0;pointer-events:none;border:1.5px dashed rgba(0,0,0,.2)}.ctl{position:absolute;top:100%;left:50%;transform:translateX(-50%);padding-top:8px;display:flex;gap:6px;opacity:0;pointer-events:none;transition:opacity .12s;z-index:2;white-space:nowrap}:host([data-filled]:hover) .ctl{opacity:1;pointer-events:auto}.ctl button{appearance:none;border:0;border-radius:6px;padding:5px 10px;cursor:pointer;background:rgba(0,0,0,.65);color:#fff;font:11px/1 system-ui,-apple-system,sans-serif}:host([data-over]) .frame{outline:2px solid #c96442;outline-offset:-2px;background:rgba(201,100,66,.1)}:host([data-filled]) .ring{display:none}';
+class ImageSlot extends HTMLElement{
+  constructor(){
+    super();
+    const root=this.attachShadow({mode:'open'});
+    root.innerHTML='<style>'+stylesheet+'</style><div class="frame"><img alt="" draggable="false"><div class="empty">'+icon+'<div class="cap"></div></div><div class="ring"></div></div><div class="ctl"><button data-act="clear">Удалить</button></div><input type="file" accept="'+ACCEPT.join(',')+'" hidden>';
+    this._frame=root.querySelector('.frame');
+    this._img=root.querySelector('.frame img');
+    this._empty=root.querySelector('.empty');
+    this._cap=root.querySelector('.cap');
+    this._input=root.querySelector('input');
+    this._depth=0;
+    this._empty.addEventListener('click',()=>this._input.click());
+    root.addEventListener('click',e=>{
+      if(e.target&&e.target.getAttribute&&e.target.getAttribute('data-act')==='clear'){
+        this._img.style.display='none';
+        this._img.removeAttribute('src');
+        this._empty.style.display='flex';
+        this.removeAttribute('data-filled');
+      }
+    });
+    this._input.addEventListener('change',()=>{
+      const f=this._input.files&&this._input.files[0];
+      if(f)this._ingest(f);
+      this._input.value='';
+    });
+  }
+  connectedCallback(){
+    this.addEventListener('dragenter',this);
+    this.addEventListener('dragover',this);
+    this.addEventListener('dragleave',this);
+    this.addEventListener('drop',this);
+    this._render();
+  }
+  disconnectedCallback(){
+    this.removeEventListener('dragenter',this);
+    this.removeEventListener('dragover',this);
+    this.removeEventListener('dragleave',this);
+    this.removeEventListener('drop',this);
+  }
+  handleEvent(e){
+    if(e.type==='dragenter'||e.type==='dragover'){e.preventDefault();e.stopPropagation();if(e.dataTransfer)e.dataTransfer.dropEffect='copy';if(e.type==='dragenter')this._depth++;this.setAttribute('data-over','');}
+    else if(e.type==='dragleave'){if(--this._depth<=0){this._depth=0;this.removeAttribute('data-over');}}
+    else if(e.type==='drop'){e.preventDefault();e.stopPropagation();this._depth=0;this.removeAttribute('data-over');const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)this._ingest(f);}
+  }
+  async _ingest(file){
+    if(!file||ACCEPT.indexOf(file.type)<0)return;
+    try{
+      const w=this.clientWidth||this.offsetWidth||MAX_DIM;
+      const url=await toDataUrl(file,w);
+      this._img.src=url;
+      this._img.style.display='block';
+      this._empty.style.display='none';
+      this.setAttribute('data-filled','');
+    }catch(err){console.warn('<image-slot> ingest failed:',err);}
+  }
+  _render(){
+    const mask=this.getAttribute('mask');
+    const shape=(this.getAttribute('shape')||'rounded').toLowerCase();
+    const placeholder=this.getAttribute('placeholder')||'Перетащите фото';
+    let radius='';
+    if(shape==='circle')radius='50%';
+    else if(shape==='pill')radius='9999px';
+    else if(shape==='rounded'){const n=parseFloat(this.getAttribute('radius'));radius=(Number.isFinite(n)?n:12)+'px';}
+    this._frame.style.borderRadius=mask?'':radius;
+    this._frame.style.clipPath=mask||'';
+    const ring=this.shadowRoot.querySelector('.ring');
+    if(ring){ring.style.borderRadius=mask?'':radius;ring.style.display=mask?'none':'';}
+    this._cap.textContent=placeholder;
+    /* Preload a saved photo when the slot has a src attribute */
+    const src=this.getAttribute('src');
+    if(src&&!this.hasAttribute('data-filled')){
+      this._img.src=src;
+      this._img.style.display='block';
+      this._empty.style.display='none';
+      this.setAttribute('data-filled','');
+    }
+  }
+}
+if(!customElements.get('image-slot'))customElements.define('image-slot',ImageSlot);
+})();
+</script>
+</head>
+<body>
+
+<div id="top" style="overflow-x:hidden">
+
+<header style="position:sticky;top:0;z-index:60;background:rgba(250,245,236,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #E8DFCF">
+  <div class="pad-sec" style="max-width:1240px;margin:0 auto;padding:14px 32px;display:flex;align-items:center;gap:28px">
+    <a href="index.html" style="display:flex;align-items:center;gap:12px;text-decoration:none">
+      <img src="assets/logo-soty.svg" alt="Арт-холл Соты — модельная библиотека № 35" style="height:48px;width:auto"/>
+    </a>
+    <nav class="nav-links" style="margin-left:auto;display:flex;align-items:center;gap:28px">
+      <a class="navl" href="index.html#about" style="color:#43392E;text-decoration:none;font-size:15px;font-weight:500">О нас</a>
+      <a class="navl" href="index.html#spaces" style="color:#43392E;text-decoration:none;font-size:15px;font-weight:500">Пространства</a>
+      <a class="navl" href="index.html#events" style="color:#43392E;text-decoration:none;font-size:15px;font-weight:500">Афиша</a>
+      <a class="navl" href="uslugi.html" style="color:#43392E;text-decoration:none;font-size:15px;font-weight:500">Услуги</a>
+      <a class="navl" href="index.html#contacts" style="color:#43392E;text-decoration:none;font-size:15px;font-weight:500">Контакты</a>
+    </nav>
+    <a class="btnp" href="index.html" style="margin-left:auto;background:#F57200;color:#fff;text-decoration:none;padding:11px 22px;border-radius:999px;font-size:14.5px;font-weight:600;white-space:nowrap">На главную</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section style="position:relative;background:#24180D;color:#fff;overflow:hidden">
+  <div style="position:absolute;right:-60px;top:-70px;width:300px;height:260px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:linear-gradient(135deg,#FFCC01,#F57200);opacity:.5"></div>
+  <div style="position:absolute;right:160px;bottom:-90px;width:180px;height:156px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:#F57200;opacity:.25"></div>
+  <div class="pad-sec" style="position:relative;max-width:1000px;margin:0 auto;padding:84px 32px 78px">
+    <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;color:#FFC24D;text-decoration:none;font-size:15px;font-weight:600;margin-bottom:24px">← На главную</a>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><span style="width:24px;height:2px;background:#FFA200"></span><span style="font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#FFC24D">Наша история</span></div>
+    <h1 style="font-family:'Prata',serif;font-weight:400;font-size:clamp(34px,5vw,60px);line-height:1.08;letter-spacing:-.01em;margin:0 0 22px">Почти девяносто лет рядом с читателем</h1>
+    <p style="font-size:clamp(17px,1.5vw,20px);line-height:1.65;color:#E7D9C6;max-width:680px;margin:0">От небольшой библиотеки при клубе железнодорожников — до современного арт-холла в Сипайлово. История модельной библиотеки № 35 — это история о том, как книга объединяет поколения.</p>
+  </div>
+</section>
+
+<!-- INTRO + STATS -->
+<section class="pad-sec" style="max-width:1000px;margin:0 auto;padding:64px 32px 24px">
+  <p style="font-size:19px;line-height:1.75;color:#3A322A;margin:0 0 36px;max-width:760px;text-wrap:pretty">Модельная библиотека № 35 имеет давнюю историю. За десятилетия она меняла адреса и названия, но неизменным оставалось главное — стремление быть местом притяжения для тех, кто любит читать, учиться и творить.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px">
+    <div style="background:#fff;border:1px solid #EFE6D6;border-radius:20px;padding:26px"><div style="font-family:'Prata',serif;font-size:34px;color:#F57200;line-height:1">1938</div><div style="font-size:14px;color:#6E6152;margin-top:8px">год основания</div></div>
+    <div style="background:#fff;border:1px solid #EFE6D6;border-radius:20px;padding:26px"><div style="font-family:'Prata',serif;font-size:34px;color:#F57200;line-height:1">2007</div><div style="font-size:14px;color:#6E6152;margin-top:8px">статус модельной библиотеки</div></div>
+    <div style="background:#fff;border:1px solid #EFE6D6;border-radius:20px;padding:26px"><div style="font-family:'Prata',serif;font-size:34px;color:#F57200;line-height:1">6 000+</div><div style="font-size:14px;color:#6E6152;margin-top:8px">книг в фонде сегодня</div></div>
+    <div style="background:#fff;border:1px solid #EFE6D6;border-radius:20px;padding:26px"><div style="font-family:'Prata',serif;font-size:34px;color:#F57200;line-height:1">2 300+</div><div style="font-size:14px;color:#6E6152;margin-top:8px">читателей</div></div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section style="padding:56px 0 24px;position:relative">
+  <div class="pad-sec" style="max-width:1000px;margin:0 auto;padding:0 32px">
+    <h2 style="font-family:'Prata',serif;font-weight:400;font-size:clamp(28px,3.6vw,42px);line-height:1.1;margin:0 0 48px;color:#221C15;text-align:center">Хронология</h2>
+    <div style="position:relative">
+      <div class="tl-line" style="position:absolute;left:50%;top:0;bottom:0;width:2px;background:linear-gradient(#FFCC01,#F57200);transform:translateX(-50%)"></div>
+
+      <div class="tl-row" style="position:relative;display:grid;grid-template-columns:1fr 80px 1fr;align-items:center;margin-bottom:40px">
+        <div class="tl-card" style="background:#fff;border:1px solid #EFE6D6;border-radius:20px;padding:26px 28px;text-align:right">
+          <div class="tl-year-inline" style="display:none;font-family:'Prata',serif;font-size:24px;color:#F57200;margin-bottom:6px">1938</div>
+          <h3 style="font-size:20px;font-weight:700;margin:0 0 8px;color:#221C15">Рождение библиотеки</h3>
+          <p style="font-size:15px;line-height:1.6;color:#6E6152;margin:0">Библиотека открылась при клубе железнодорожников и сразу стала местом встречи и чтения для горожан.</p>
+        </div>
+        <div style="display:flex;justify-content:center"><span class="tl-dot" style="position:relative;z-index:2;width:64px;height:55px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:#FAF5EC;display:grid;place-items:center"><span style="width:52px;height:45px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:linear-gradient(135deg,#FFCC01,#F57200);display:grid;place-items:center;color:#fff;font-family:'Prata',serif;font-size:14px">1938</span></span></div>
+        <div class="tl-spacer"></div>
+      </div>
+
+      <div class="tl-row" style="position:relative;display:grid;grid-template-columns:1fr 80px 1fr;align-items:center;margin-bottom:40px">
+        <div class="tl-spacer"></div>
+        <div style="display:flex;justify-content:center"><span class="tl-dot" style="position:relative;z-index:2;width:64px;height:55px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:#FAF5EC;display:grid;place-items:center"><span style="width:52px;height:45px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:linear-gradient(135deg,#FFCC01,#F57200);display:grid;place-items:center;color:#fff;font-family:'Prata',serif;font-size:14px">1972</span></span></div>
+        <div class="tl-card" style="background:#fff;border:1px solid #EFE6D6;border-radius:20px;padding:26px 28px;text-align:left">
+          <div class="tl-year-inline" style="display:none;font-family:'Prata',serif;font-size:24px;color:#F57200;margin-bottom:6px">1972</div>
+          <h3 style="font-size:20px;font-weight:700;margin:0 0 8px;color:#221C15">Центральная библиотека</h3>
+          <p style="font-size:15px;line-height:1.6;color:#6E6152;margin:0">Библиотека получила статус центральной в системе Башкирского отделения Куйбышевской железной дороги.</p>
+        </div>
+      </div>
+
+      <div class="tl-row" style="position:relative;display:grid;grid-template-columns:1fr 80px 1fr;align-items:center;margin-bottom:40px">
+        <div class="tl-card" style="background:#fff;border:1px solid #EFE6D6;border-radius:20px;padding:26px 28px;text-align:right">
+          <div class="tl-year-inline" style="display:none;font-family:'Prata',serif;font-size:24px;color:#F57200;margin-bottom:6px">2002</div>
+          <h3 style="font-size:20px;font-weight:700;margin:0 0 8px;color:#221C15">В составе библиотек Уфы</h3>
+          <p style="font-size:15px;line-height:1.6;color:#6E6152;margin:0">Библиотека вошла в Централизованную систему массовых библиотек города Уфы Республики Башкортостан.</p>
+        </div>
+        <div style="display:flex;justify-content:center"><span class="tl-dot" style="position:relative;z-index:2;width:64px;height:55px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:#FAF5EC;display:grid;place-items:center"><span style="width:52px;height:45px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:linear-gradient(135deg,#FFCC01,#F57200);display:grid;place-items:center;color:#fff;font-family:'Prata',serif;font-size:14px">2002</span></span></div>
+        <div class="tl-spacer"></div>
+      </div>
+
+      <div class="tl-row" style="position:relative;display:grid;grid-template-columns:1fr 80px 1fr;align-items:center;margin-bottom:40px">
+        <div class="tl-spacer"></div>
+        <div style="display:flex;justify-content:center"><span class="tl-dot" style="position:relative;z-index:2;width:64px;height:55px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:#FAF5EC;display:grid;place-items:center"><span style="width:52px;height:45px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:linear-gradient(135deg,#FFCC01,#F57200);display:grid;place-items:center;color:#fff;font-family:'Prata',serif;font-size:14px">2007</span></span></div>
+        <div class="tl-card" style="background:#fff;border:1px solid #EFE6D6;border-radius:20px;padding:26px 28px;text-align:left">
+          <div class="tl-year-inline" style="display:none;font-family:'Prata',serif;font-size:24px;color:#F57200;margin-bottom:6px">2007</div>
+          <h3 style="font-size:20px;font-weight:700;margin:0 0 8px;color:#221C15">Статус модельной</h3>
+          <p style="font-size:15px;line-height:1.6;color:#6E6152;margin:0">Библиотека получила статус модельной — современной, технологичной и открытой к новым форматам работы с читателями.</p>
+        </div>
+      </div>
+
+      <div class="tl-row" style="position:relative;display:grid;grid-template-columns:1fr 80px 1fr;align-items:center">
+        <div class="tl-card" style="background:linear-gradient(135deg,#F57200,#FFA200);border:none;border-radius:20px;padding:28px;text-align:right;color:#fff;box-shadow:0 22px 50px -24px rgba(245,114,0,.6)">
+          <div class="tl-year-inline" style="display:none;font-family:'Prata',serif;font-size:24px;color:#fff;margin-bottom:6px">2026</div>
+          <h3 style="font-size:21px;font-weight:700;margin:0 0 8px">Рождение Арт-холла «Соты»</h3>
+          <p style="font-size:15px;line-height:1.6;color:#FFF1DC;margin:0">Библиотека переехала в новый микрорайон — Сипайлово, на ул. Юрия Гагарина, 74/1 — и стала называться Арт-холл «Соты».</p>
+        </div>
+        <div style="display:flex;justify-content:center"><span class="tl-dot" style="position:relative;z-index:2;width:72px;height:62px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:#FAF5EC;display:grid;place-items:center"><span style="width:60px;height:52px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:#24180D;display:grid;place-items:center;color:#FFCC01;font-family:'Prata',serif;font-size:14px">2026</span></span></div>
+        <div class="tl-spacer"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TODAY -->
+<section class="pad-sec" style="max-width:1000px;margin:0 auto;padding:48px 32px 24px">
+  <div style="background:#fff;border:1px solid #EFE6D6;border-radius:26px;padding:48px 44px">
+    <h2 style="font-family:'Prata',serif;font-weight:400;font-size:clamp(26px,3.4vw,38px);line-height:1.12;margin:0 0 20px;color:#221C15">Библиотека сегодня</h2>
+    <p style="font-size:17px;line-height:1.75;color:#3A322A;margin:0 0 16px;text-wrap:pretty">Сегодня фонд библиотеки насчитывает более шести тысяч экземпляров книг, а её читателями стали около 2 300 жителей города. Основное направление работы — эстетическое просвещение.</p>
+    <p style="font-size:17px;line-height:1.75;color:#3A322A;margin:0 0 24px;text-wrap:pretty">Библиотека поддерживает сотрудничество с Советом ветеранов войны и труда Октябрьского района городского округа город Уфа, с близлежащими школами — МАОУ «Центр образования № 159», МАОУ Школа № 141, МАОУ Школа № 130, — с молодёжным центром «Молодое творчество» и Республиканским ресурсным центром «Семья».</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px">
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="width:30px;height:34px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:#FBEFD6;flex:none;margin-top:2px;display:grid;place-items:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C2631A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.5;color:#3A322A">Встречи с интересными людьми и презентации книг</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="width:30px;height:34px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:#FBEFD6;flex:none;margin-top:2px;display:grid;place-items:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C2631A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.5;color:#3A322A">Художественные выставки и экспозиции</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="width:30px;height:34px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:#FBEFD6;flex:none;margin-top:2px;display:grid;place-items:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C2631A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span style="font-size:15px;line-height:1.5;color:#3A322A">Выставки декоративно-прикладного творчества</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO STRIP -->
+<section class="pad-sec" style="max-width:1000px;margin:0 auto;padding:24px 32px 24px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+    <image-slot id="history-1" src="assets/photos/about-3.webp" style="width:100%;height:200px" shape="rounded" radius="18" placeholder="Архивное фото"></image-slot>
+    <image-slot id="history-2" src="assets/photos/space-fond.webp" style="width:100%;height:200px" shape="rounded" radius="18" placeholder="Фото библиотеки"></image-slot>
+    <image-slot id="history-3" src="assets/photos/club-photo.webp" style="width:100%;height:200px" shape="rounded" radius="18" placeholder="Фото мероприятия"></image-slot>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="pad-sec" style="max-width:1000px;margin:0 auto;padding:32px 32px 80px">
+  <div style="background:#24180D;border-radius:26px;padding:52px 44px;text-align:center;color:#fff;position:relative;overflow:hidden">
+    <div style="position:absolute;right:-30px;top:-30px;width:160px;height:184px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(135deg,#FFCC01,#F57200);opacity:.4"></div>
+    <h2 style="font-family:'Prata',serif;font-weight:400;font-size:clamp(26px,3.4vw,38px);line-height:1.12;margin:0 0 16px;position:relative">Станьте частью нашей истории</h2>
+    <p style="font-size:17px;line-height:1.6;color:#E7D9C6;margin:0 0 28px;position:relative;max-width:520px;margin-left:auto;margin-right:auto">Запишитесь в библиотеку и откройте для себя мир книг, искусства и тёплого соседского сообщества.</p>
+    <a class="btnp" href="index.html" style="display:inline-block;background:#F57200;color:#fff;text-decoration:none;padding:16px 34px;border-radius:999px;font-size:16px;font-weight:600;position:relative">Стать читателем</a>
+  </div>
+</section>
+
+<footer style="background:#1A1009;color:#9C8B73;padding:36px 0">
+  <div class="pad-sec" style="max-width:1000px;margin:0 auto;padding:0 32px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px">
+    <span>© 2026 Модельная библиотека № 35 «Арт-холл Соты», Уфа</span>
+    <a href="index.html" style="color:#FFC24D;text-decoration:none">На главную →</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

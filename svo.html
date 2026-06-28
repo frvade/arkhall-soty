@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>СВО — модельная библиотека № 35 «Арт-холл Соты», Уфа</title>
+<meta name="description" content="Раздел СВО модельной библиотеки № 35 в Уфе: волонтёрское движение, герои СВО, хроника, льготы для участников и законодательные акты.">
+<meta property="og:title" content="СВО — модельная библиотека № 35 «Арт-холл Соты», Уфа">
+<meta property="og:description" content="Раздел СВО модельной библиотеки № 35 в Уфе: волонтёрское движение, герои СВО, хроника, льготы для участников и законодательные акты.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#FAF5EC;color:#221C15;font-family:'Onest',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:#FFCC01;color:#221C15}
+img{display:block;max-width:100%}
+.navl{transition:color .2s ease;white-space:nowrap}
+.navl:hover{color:#F57200}
+.btnp{transition:background .25s ease,transform .25s ease,box-shadow .25s ease}
+.btnp:hover{background:#D9650A;transform:translateY(-2px);box-shadow:0 14px 30px -12px rgba(245,114,0,.6)}
+.sec-card{transition:transform .35s cubic-bezier(.2,.7,.3,1),box-shadow .35s ease}
+.sec-card:hover{transform:translateY(-4px);box-shadow:0 22px 50px -24px rgba(60,38,8,.4)}
+@media (max-width:880px){.pad-sec{padding-left:20px!important;padding-right:20px!important}.nav-links{display:none!important}}
+</style>
+<script>
+/* image-slot — drag-and-drop image placeholder (session only, no persistence) */
+(()=>{
+const ACCEPT=['image/png','image/jpeg','image/webp','image/avif'];
+const MAX_DIM=1200;
+async function toDataUrl(file,targetW){
+  const bitmap=await createImageBitmap(file);
+  try{
+    const cap=Math.min(MAX_DIM,Math.max(1,Math.round(targetW*2))||MAX_DIM);
+    const scale=Math.min(1,cap/Math.max(bitmap.width,bitmap.height));
+    const w=Math.max(1,Math.round(bitmap.width*scale));
+    const h=Math.max(1,Math.round(bitmap.height*scale));
+    const canvas=document.createElement('canvas');
+    canvas.width=w;canvas.height=h;
+    canvas.getContext('2d').drawImage(bitmap,0,0,w,h);
+    return canvas.toDataURL('image/webp',0.85);
+  }finally{bitmap.close&&bitmap.close()}
+}
+const icon='<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>';
+const stylesheet=':host{display:inline-block;position:relative;vertical-align:top;font:13px/1.3 system-ui,-apple-system,sans-serif;color:rgba(0,0,0,.55);width:240px;height:160px}.frame{position:absolute;inset:0;overflow:hidden;background:rgba(0,0,0,.05)}.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:12px;cursor:pointer;user-select:none}.empty svg{opacity:.4}.empty .cap{max-width:90%;font-weight:500}.ring{position:absolute;inset:0;pointer-events:none;border:1.5px dashed rgba(0,0,0,.2)}.ctl{position:absolute;top:100%;left:50%;transform:translateX(-50%);padding-top:8px;display:flex;gap:6px;opacity:0;pointer-events:none;transition:opacity .12s;z-index:2;white-space:nowrap}:host([data-filled]:hover) .ctl{opacity:1;pointer-events:auto}.ctl button{appearance:none;border:0;border-radius:6px;padding:5px 10px;cursor:pointer;background:rgba(0,0,0,.65);color:#fff;font:11px/1 system-ui,-apple-system,sans-serif}:host([data-over]) .frame{outline:2px solid #c96442;outline-offset:-2px;background:rgba(201,100,66,.1)}:host([data-filled]) .ring{display:none}';
+class ImageSlot extends HTMLElement{
+  constructor(){
+    super();
+    const root=this.attachShadow({mode:'open'});
+    root.innerHTML='<style>'+stylesheet+'</style><div class="frame"><img alt="" draggable="false"><div class="empty">'+icon+'<div class="cap"></div></div><div class="ring"></div></div><div class="ctl"><button data-act="clear">Удалить</button></div><input type="file" accept="'+ACCEPT.join(',')+'" hidden>';
+    this._frame=root.querySelector('.frame');
+    this._img=root.querySelector('.frame img');
+    this._empty=root.querySelector('.empty');
+    this._cap=root.querySelector('.cap');
+    this._input=root.querySelector('input');
+    this._depth=0;
+    this._empty.addEventListener('click',()=>this._input.click());
+    root.addEventListener('click',e=>{
+      if(e.target&&e.target.getAttribute&&e.target.getAttribute('data-act')==='clear'){
+        this._img.style.display='none';
+        this._img.removeAttribute('src');
+        this._empty.style.display='flex';
+        this.removeAttribute('data-filled');
+      }
+    });
+    this._input.addEventListener('change',()=>{
+      const f=this._input.files&&this._input.files[0];
+      if(f)this._ingest(f);
+      this._input.value='';
+    });
+  }
+  connectedCallback(){
+    this.addEventListener('dragenter',this);
+    this.addEventListener('dragover',this);
+    this.addEventListener('dragleave',this);
+    this.addEventListener('drop',this);
+    this._render();
+  }
+  disconnectedCallback(){
+    this.removeEventListener('dragenter',this);
+    this.removeEventListener('dragover',this);
+    this.removeEventListener('dragleave',this);
+    this.removeEventListener('drop',this);
+  }
+  handleEvent(e){
+    if(e.type==='dragenter'||e.type==='dragover'){e.preventDefault();e.stopPropagation();if(e.dataTransfer)e.dataTransfer.dropEffect='copy';if(e.type==='dragenter')this._depth++;this.setAttribute('data-over','');}
+    else if(e.type==='dragleave'){if(--this._depth<=0){this._depth=0;this.removeAttribute('data-over');}}
+    else if(e.type==='drop'){e.preventDefault();e.stopPropagation();this._depth=0;this.removeAttribute('data-over');const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)this._ingest(f);}
+  }
+  async _ingest(file){
+    if(!file||ACCEPT.indexOf(file.type)<0)return;
+    try{
+      const w=this.clientWidth||this.offsetWidth||MAX_DIM;
+      const url=await toDataUrl(file,w);
+      this._img.src=url;
+      this._img.style.display='block';
+      this._empty.style.display='none';
+      this.setAttribute('data-filled','');
+    }catch(err){console.warn('<image-slot> ingest failed:',err);}
+  }
+  _render(){
+    const mask=this.getAttribute('mask');
+    const shape=(this.getAttribute('shape')||'rounded').toLowerCase();
+    const placeholder=this.getAttribute('placeholder')||'Перетащите фото';
+    let radius='';
+    if(shape==='circle')radius='50%';
+    else if(shape==='pill')radius='9999px';
+    else if(shape==='rounded'){const n=parseFloat(this.getAttribute('radius'));radius=(Number.isFinite(n)?n:12)+'px';}
+    this._frame.style.borderRadius=mask?'':radius;
+    this._frame.style.clipPath=mask||'';
+    const ring=this.shadowRoot.querySelector('.ring');
+    if(ring){ring.style.borderRadius=mask?'':radius;ring.style.display=mask?'none':'';}
+    this._cap.textContent=placeholder;
+    /* Preload a saved photo when the slot has a src attribute */
+    const src=this.getAttribute('src');
+    if(src&&!this.hasAttribute('data-filled')){
+      this._img.src=src;
+      this._img.style.display='block';
+      this._empty.style.display='none';
+      this.setAttribute('data-filled','');
+    }
+  }
+}
+if(!customElements.get('image-slot'))customElements.define('image-slot',ImageSlot);
+})();
+</script>
+</head>
+<body>
+
+<div id="top" style="overflow-x:hidden">
+
+<header style="position:sticky;top:0;z-index:60;background:rgba(250,245,236,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #E8DFCF">
+  <div class="pad-sec" style="max-width:1240px;margin:0 auto;padding:14px 32px;display:flex;align-items:center;gap:28px">
+    <a href="index.html" style="display:flex;align-items:center;gap:12px;text-decoration:none">
+      <img src="assets/logo-soty.svg" alt="Арт-холл Соты — модельная библиотека № 35" style="height:48px;width:auto"/>
+    </a>
+    <nav class="nav-links" style="margin-left:auto;display:flex;align-items:center;gap:28px">
+      <a class="navl" href="index.html#about" style="color:#43392E;text-decoration:none;font-size:15px;font-weight:500">О нас</a>
+      <a class="navl" href="index.html#events" style="color:#43392E;text-decoration:none;font-size:15px;font-weight:500">Афиша</a>
+      <a class="navl" href="uslugi.html" style="color:#43392E;text-decoration:none;font-size:15px;font-weight:500">Услуги</a>
+      <a class="navl" href="istoriya.html" style="color:#43392E;text-decoration:none;font-size:15px;font-weight:500">История</a>
+      <a class="navl" href="index.html#contacts" style="color:#43392E;text-decoration:none;font-size:15px;font-weight:500">Контакты</a>
+    </nav>
+    <a class="btnp" href="index.html" style="margin-left:auto;background:#F57200;color:#fff;text-decoration:none;padding:11px 22px;border-radius:999px;font-size:14.5px;font-weight:600;white-space:nowrap">На главную</a>
+  </div>
+</header>
+
+<section style="position:relative;background:#24180D;color:#fff;overflow:hidden">
+  <div style="position:absolute;right:-50px;top:-60px;width:240px;height:208px;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:linear-gradient(135deg,#FFCC01,#F57200);opacity:.4"></div>
+  <div class="pad-sec" style="position:relative;max-width:1000px;margin:0 auto;padding:72px 32px 64px">
+    <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;color:#FFC24D;text-decoration:none;font-size:15px;font-weight:600;margin-bottom:22px">← На главную</a>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><span style="width:24px;height:2px;background:#FFA200"></span><span style="font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#FFC24D">Поддержка</span></div>
+    <h1 style="font-family:'Prata',serif;font-weight:400;font-size:clamp(32px,4.6vw,54px);line-height:1.08;margin:0 0 18px">СВО: вместе мы сильнее</h1>
+    <p style="font-size:clamp(17px,1.5vw,19px);line-height:1.65;color:#E7D9C6;max-width:680px;margin:0">Информационный раздел для участников специальной военной операции и их семей: о волонтёрском движении, льготах, важных документах и о тех, кем мы гордимся.</p>
+  </div>
+</section>
+
+<section class="pad-sec" style="max-width:1000px;margin:0 auto;padding:56px 32px 24px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+
+    <a href="#" class="sec-card" style="text-decoration:none;background:#fff;border:1px solid #EFE6D6;border-radius:22px;padding:30px;display:flex;flex-direction:column">
+      <span style="width:52px;height:59px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(135deg,#FFCC01,#F57200);display:grid;place-items:center;margin-bottom:18px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+      <h3 style="font-size:20px;font-weight:700;margin:0 0 8px;color:#221C15">Волонтёрское движение</h3>
+      <p style="font-size:15px;line-height:1.6;color:#6E6152;margin:0 0 16px;flex:1">Как присоединиться к помощи, какие акции проходят и чем может помочь каждый.</p>
+      <span style="display:inline-flex;align-items:center;gap:8px;color:#C2631A;font-weight:600;font-size:15px">Подробнее →</span>
+    </a>
+
+    <a href="#" class="sec-card" style="text-decoration:none;background:#fff;border:1px solid #EFE6D6;border-radius:22px;padding:30px;display:flex;flex-direction:column">
+      <span style="width:52px;height:59px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(135deg,#FFCC01,#F57200);display:grid;place-items:center;margin-bottom:18px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 11 4.5-2.5 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/></svg></span>
+      <h3 style="font-size:20px;font-weight:700;margin:0 0 8px;color:#221C15">Герои СВО</h3>
+      <p style="font-size:15px;line-height:1.6;color:#6E6152;margin:0 0 16px;flex:1">Истории земляков, проявивших мужество. Мы храним память и рассказываем о них.</p>
+      <span style="display:inline-flex;align-items:center;gap:8px;color:#C2631A;font-weight:600;font-size:15px">Подробнее →</span>
+    </a>
+
+    <a href="#" class="sec-card" style="text-decoration:none;background:#fff;border:1px solid #EFE6D6;border-radius:22px;padding:30px;display:flex;flex-direction:column">
+      <span style="width:52px;height:59px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(135deg,#FFCC01,#F57200);display:grid;place-items:center;margin-bottom:18px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg></span>
+      <h3 style="font-size:20px;font-weight:700;margin:0 0 8px;color:#221C15">Хроника СВО</h3>
+      <p style="font-size:15px;line-height:1.6;color:#6E6152;margin:0 0 16px;flex:1">Лента событий, мероприятий поддержки и важных дат, связанных с нашими земляками.</p>
+      <span style="display:inline-flex;align-items:center;gap:8px;color:#C2631A;font-weight:600;font-size:15px">Подробнее →</span>
+    </a>
+
+    <a href="#" class="sec-card" style="text-decoration:none;background:#fff;border:1px solid #EFE6D6;border-radius:22px;padding:30px;display:flex;flex-direction:column">
+      <span style="width:52px;height:59px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(135deg,#FFCC01,#F57200);display:grid;place-items:center;margin-bottom:18px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V2"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 22a8 8 0 0 0 8-8H4a8 8 0 0 0 8 8Z"/></svg></span>
+      <h3 style="font-size:20px;font-weight:700;margin:0 0 8px;color:#221C15">Льготы для участников</h3>
+      <p style="font-size:15px;line-height:1.6;color:#6E6152;margin:0 0 16px;flex:1">Информация о мерах поддержки участников СВО и членов их семей.</p>
+      <span style="display:inline-flex;align-items:center;gap:8px;color:#C2631A;font-weight:600;font-size:15px">Подробнее →</span>
+    </a>
+
+    <a href="#" class="sec-card" style="text-decoration:none;background:#fff;border:1px solid #EFE6D6;border-radius:22px;padding:30px;display:flex;flex-direction:column">
+      <span style="width:52px;height:59px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(135deg,#FFCC01,#F57200);display:grid;place-items:center;margin-bottom:18px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg></span>
+      <h3 style="font-size:20px;font-weight:700;margin:0 0 8px;color:#221C15">Законодательные акты</h3>
+      <p style="font-size:15px;line-height:1.6;color:#6E6152;margin:0 0 16px;flex:1">Действующие нормативные документы и официальные источники по теме.</p>
+      <span style="display:inline-flex;align-items:center;gap:8px;color:#C2631A;font-weight:600;font-size:15px">Подробнее →</span>
+    </a>
+
+  </div>
+  <div style="display:flex;gap:12px;align-items:flex-start;margin-top:24px;background:#FBEFD6;border-radius:16px;padding:18px 22px"><span style="flex:none;font-size:18px">ℹ️</span><p style="font-size:14.5px;line-height:1.6;color:#6E5A3E;margin:0">Раздел оформлен как заготовка. Пришлите материалы и ссылки по подразделам — мы наполним их содержанием.</p></div>
+</section>
+
+<footer style="background:#1A1009;color:#9C8B73;padding:36px 0;margin-top:32px">
+  <div class="pad-sec" style="max-width:1000px;margin:0 auto;padding:0 32px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px">
+    <span>© 2026 Модельная библиотека № 35 «Арт-холл Соты», Уфа</span>
+    <a href="index.html" style="color:#FFC24D;text-decoration:none">На главную →</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
